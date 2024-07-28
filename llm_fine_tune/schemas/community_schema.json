@@ -1,0 +1,58 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "The name of the community."
+        },
+        "from_the": {
+            "type": "string",
+            "description": "Pricing information for the homes in the community."
+        },
+        "hoa_name": {
+            "type": "string",
+            "description": "The name of the Homeowners Association (HOA) managing the community."
+        },
+        "hoa_yearly_fee": {
+            "type": "string",
+            "description": "The yearly fee required by the HOA."
+        },
+        "city": {
+            "type": "string",
+            "description": "The city where the community is located."
+        },
+        "zip": {
+            "type": "string",
+            "description": "The ZIP code for the community's location."
+        },
+        "county": {
+            "type": "string",
+            "description": "The county where the community is situated."
+        },
+        "headline": {
+            "type": "string",
+            "description": "A brief headline describing the type of homes available in the community."
+        },
+        "description": {
+            "type": "string",
+            "description": "A detailed description of the community, including location benefits and nearby amenities."
+        },
+        "model_home_phone": {
+            "type": "string",
+            "description": "The contact phone number for the model home."
+        },
+        "amenities_photos": {
+            "type": "array",
+            "description": "A list of photos showcasing the community's amenities.",
+            "items": {
+                "type": "string",
+                "description": "The name or description of the amenity shown in the photo."
+            }
+        },
+        "state": {
+            "type": "string",
+            "description": "The state where the community is located."
+        }
+    },
+    "required": ["name", "from_the", "hoa_name", "hoa_yearly_fee", "city", "zip", "county", "headline", "description", "model_home_phone", "amenities_photos", "state"]
+}

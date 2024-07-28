@@ -1,0 +1,70 @@
+{
+    "type": "object",
+    "properties": {
+        "address": {
+            "type": "string",
+            "description": "The address of the home."
+        },
+        "city": {
+            "type": "string",
+            "description": "The city where the home is located."
+        },
+        "zip": {
+            "type": "string",
+            "description": "The ZIP code for the home’s location."
+        },
+        "square_feet": {
+            "type": "string",
+            "description": "The total square footage of the home."
+        },
+        "bedrooms": {
+            "type": "string",
+            "description": "The number of bedrooms in the home."
+        },
+        "bathrooms": {
+            "type": "string",
+            "description": "The number of full bathrooms in the home."
+        },
+        "half_baths": {
+            "type": "string",
+            "description": "The number of half bathrooms in the home."
+        },
+        "garage": {
+            "type": "string",
+            "description": "The number of garage spaces available with the home."
+        },
+        "stories": {
+            "type": "string",
+            "description": "The number of stories in the home."
+        },
+        "description": {
+            "type": "string",
+            "description": "A detailed description of the home's layout and features."
+        },
+        "unique_features": {
+            "type": "string",
+            "description": "Specific standout features of the home."
+        },
+        "floor_plan": {
+            "type": "string",
+            "description": "The name of the floor plan for the home."
+        },
+        "floorplan_type": {
+            "type": "string",
+            "description": "The type of home based on the floor plan (e.g., Townhome)."
+        },
+        "community": {
+            "type": "string",
+            "description": "The community to which the home belongs."
+        },
+        "special1": {
+            "type": "string",
+            "description": "A special promotional offer related to the home."
+        },
+        "special2": {
+            "type": "string",
+            "description": "Another special offer or promotion available for the home."
+        }
+    },
+    "required": ["address", "city", "zip", "square_feet", "bedrooms", "bathrooms", "half_baths", "garage", "stories", "description", "unique_features", "floor_plan", "floorplan_type", "community", "special1", "special2"]
+}

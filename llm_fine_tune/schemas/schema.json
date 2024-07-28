@@ -1,0 +1,233 @@
+{
+    "type": "object",
+    "properties": {
+        "communities": {
+            "type": "array",
+            "description": "A list of community details including name, pricing, location, amenities, HOA information, headline, description, and contact information.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the community, often including its sales status."
+                    },
+                    "from_the": {
+                        "type": "string",
+                        "description": "Pricing information for the homes in the community."
+                    },
+                    "hoa_name": {
+                        "type": "string",
+                        "description": "The name of the Homeowners Association (HOA) managing the community."
+                    },
+                    "hoa_yearly_fee": {
+                        "type": "string",
+                        "description": "The yearly fee required by the HOA."
+                    },
+                    "city": {
+                        "type": "string",
+                        "description": "The city where the community is located."
+                    },
+                    "zip": {
+                        "type": "string",
+                        "description": "The ZIP code for the community's location."
+                    },
+                    "county": {
+                        "type": "string",
+                        "description": "The county where the community is situated."
+                    },
+                    "headline": {
+                        "type": "string",
+                        "description": "A brief headline describing the type of homes available in the community."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A detailed description of the community, including location benefits and nearby amenities."
+                    },
+                    "model_home_phone": {
+                        "type": "string",
+                        "description": "The contact phone number for the model home."
+                    },
+                    "amenities_photos": {
+                        "type": "array",
+                        "description": "A list of photos showcasing the community's amenities.",
+                        "items": {
+                            "type": "string",
+                            "description": "The name or description of the amenity shown in the photo."
+                        }
+                    },
+                    "state": {
+                        "type": "string",
+                        "description": "The state where the community is located."
+                    }
+                },
+                "required": ["name", "from_the", "city", "zip", "county", "headline", "description", "model_home_phone", "state"]
+            }
+        },
+        "homes_mir": {
+            "type": "array",
+            "description": "A list of move-in ready homes, including their address, size, number of bedrooms and bathrooms, garage details, unique features, and any special offers.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "address": {
+                        "type": "string",
+                        "description": "The address of the move-in ready home."
+                    },
+                    "city": {
+                        "type": "string",
+                        "description": "The city where the home is located."
+                    },
+                    "zip": {
+                        "type": "string",
+                        "description": "The ZIP code for the home’s location."
+                    },
+                    "square_feet": {
+                        "type": "string",
+                        "description": "The total square footage of the home."
+                    },
+                    "bedrooms": {
+                        "type": "string",
+                        "description": "The number of bedrooms in the home."
+                    },
+                    "bathrooms": {
+                        "type": "string",
+                        "description": "The number of full bathrooms in the home."
+                    },
+                    "half_baths": {
+                        "type": "string",
+                        "description": "The number of half bathrooms in the home."
+                    },
+                    "garage": {
+                        "type": "string",
+                        "description": "The number of garage spaces available with the home."
+                    },
+                    "stories": {
+                        "type": "string",
+                        "description": "The number of stories in the home."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A detailed description of the home's layout and features."
+                    },
+                    "unique_features": {
+                        "type": "string",
+                        "description": "Specific standout features of the home."
+                    },
+                    "floor_plan": {
+                        "type": "string",
+                        "description": "The name of the floor plan for the home."
+                    },
+                    "floorplan_type": {
+                        "type": "string",
+                        "description": "The type of home based on the floor plan (e.g., Townhome)."
+                    },
+                    "community": {
+                        "type": "string",
+                        "description": "The community to which the home belongs."
+                    },
+                    "special1": {
+                        "type": "string",
+                        "description": "Special promotional offer related to the home."
+                    },
+                    "special2": {
+                        "type": "string",
+                        "description": "Another special offer or promotion available for the home."
+                    }
+                },
+                "required": ["address", "city", "zip", "square_feet", "bedrooms", "bathrooms", "half_baths", "garage", "stories", "description", "unique_features", "floor_plan", "floorplan_type", "community", "special1", "special2"]
+            }
+        },
+        "homes_rtb": {
+            "type": "array",
+            "description": "A list of ready-to-build homes with detailed descriptions, size, number of bedrooms and bathrooms, unique features, and customization options.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "description": {
+                        "type": "string",
+                        "description": "A detailed description of the ready-to-build home, including layout and available customizations."
+                    },
+                    "bedrooms": {
+                        "type": "string",
+                        "description": "The number of bedrooms in the home."
+                    },
+                    "bathrooms": {
+                        "type": "string",
+                        "description": "The number of full bathrooms in the home."
+                    },
+                    "half_baths": {
+                        "type": "string",
+                        "description": "The number of half bathrooms in the home."
+                    },
+                    "square_feet": {
+                        "type": "string",
+                        "description": "The total square footage of the home."
+                    },
+                    "garage": {
+                        "type": "string",
+                        "description": "The number of garage spaces available with the home."
+                    },
+                    "stories": {
+                        "type": "string",
+                        "description": "The number of stories in the home."
+                    },
+                    "unique_features": {
+                        "type": "string",
+                        "description": "Specific standout features of the home."
+                    },
+                    "floor_plan": {
+                        "type": "string",
+                        "description": "The name of the floor plan for the home."
+                    },
+                    "community": {
+                        "type": "string",
+                        "description": "The community to which the home belongs."
+                    }
+                },
+                "required": ["description", "bedrooms", "bathrooms", "half_baths", "square_feet", "garage", "stories", "unique_features", "floor_plan", "community"]
+            }
+        },
+        "division": {
+            "type": "object",
+            "description": "Information about the housing division, including its name, subheadline, introductory text, description, and highlights of the area.",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the division."
+                },
+                "subheadline": {
+                    "type": "string",
+                    "description": "A subheadline describing the division."
+                },
+                "intro": {
+                    "type": "string",
+                    "description": "An introductory text about the division."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A detailed description of the division, including its location and benefits."
+                },
+                "highlights": {
+                    "type": "array",
+                    "description": "A list of highlights and notable features of the area within the division.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the highlight or notable feature."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "A detailed description of the highlight or notable feature."
+                            }
+                        },
+                        "required": ["name", "description"]
+                    }
+                }
+            },
+            "required": ["name", "subheadline", "intro", "description", "highlights"]
+        }
+    },
+    "required": ["communities", "homes_mir", "homes_rtb", "division"]
+}

@@ -234,13 +234,13 @@ def load_city_data():
 
         if not os.path.exists(city_path):
             city_data = download_json(city_url, city_path)
+            flattened_data = flatten_data(city_data)
+            filtered_data = filter_data(flattened_data, FIELDS)
+            transformed_data = transform_city_data(filtered_data)
+            save_json(transformed_data, city_path)
+            
         else:
             city_data = load_json(city_path)
-
-
-        flattened_data = flatten_data(city_data)
-        filtered_data = filter_data(flattened_data, FIELDS)
-        transformed_data = transform_city_data(filtered_data)
 
 if __name__ == "__main__":
     load_city_data()

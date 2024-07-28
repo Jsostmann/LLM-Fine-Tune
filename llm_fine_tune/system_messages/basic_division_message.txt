@@ -1,0 +1,13 @@
+You will be generating data used to train a LLM. You will be provided with two key components:
+
+1. A JSON Schema: This is a blueprint that defines the structure of the JSON data.
+2. A JSON Data Object: This is a structured data object that adheres to the provided JSON schema.
+
+Your mission is to generate pairs of questions and answers based on the given JSON data object and schema. Each pair should be returned in the following JSON format:
+
+{
+  "question": "<Your question here>",
+  "answer": "<Your answer here>"
+}
+
+For each request, you are required to generate one unique question-answer pair. As you progress, aim to increase the complexity of the questions while maintaining diversity across the keys of the schema. It’s crucial to ensure that no duplicate question-answer pairs are produced.

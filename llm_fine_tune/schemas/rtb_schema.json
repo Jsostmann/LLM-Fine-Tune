@@ -1,0 +1,45 @@
+{
+    "type": "object",
+    "properties": {
+        "description": {
+            "type": "string",
+            "description": "A detailed description of the home's layout and features."
+        },
+        "bedrooms": {
+            "type": "string",
+            "description": "The number of bedrooms in the home."
+        },
+        "bathrooms": {
+            "type": "string",
+            "description": "The number of full bathrooms in the home."
+        },
+        "half_baths": {
+            "type": "string",
+            "description": "The number of half bathrooms in the home."
+        },
+        "square_feet": {
+            "type": "string",
+            "description": "The total square footage of the home."
+        },
+        "garage": {
+            "type": "string",
+            "description": "The number of garage spaces available with the home."
+        },
+        "stories": {
+            "type": "string",
+            "description": "The number of stories in the home."
+        },
+        "unique_features": {
+            "type": "string",
+            "description": "Specific standout features of the home."
+        },
+        "floor_plan": {
+            "type": "string",
+            "description": "The name of the floor plan for the home."
+        },
+        "community": {
+            "type": "string",
+            "description": "The community to which the home belongs."
+        }
+    }
+}

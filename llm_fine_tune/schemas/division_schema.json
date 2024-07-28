@@ -1,0 +1,46 @@
+{
+    "type": "object",
+    "properties": {
+        "division": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the division."
+                },
+                "subheadline": {
+                    "type": "string",
+                    "description": "A subheadline describing the division."
+                },
+                "intro": {
+                    "type": "string",
+                    "description": "An introductory text about the division."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A detailed description of the division, including its location and benefits."
+                },
+                "highlights": {
+                    "type": "array",
+                    "description": "A list of highlights and notable features of the area within the division.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the highlight or notable feature."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "A detailed description of the highlight or notable feature."
+                            }
+                        },
+                        "required": ["name", "description"]
+                    }
+                }
+            },
+            "required": ["name", "subheadline", "intro", "description", "highlights"]
+        }
+    },
+    "required": ["division"]
+}
