@@ -47,6 +47,7 @@ FIELDS = [
 
 BASE_URL = "https://www.eastwoodhomes.com/api/search?query="
 CITIES = ["Greensboro+Area", "Atlanta", "Charleston", "Columbia", "Greenville", "Richmond", "Charlotte", "Raleigh"]
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = "eastwood_data"
 
 
@@ -152,7 +153,9 @@ def flatten_data(data):
 def transform_city_data(data):
 
     mir_homes_offset = None
+    current_mir_home = None
     rtb_homes_offset = None
+    current_rtb_home = None
     
     transformed_data = {
         "communities": [],
@@ -183,13 +186,11 @@ def transform_city_data(data):
 
             if not mir_homes_offset:
                 mir_homes_offset = n
-            if n - mir_homes_offset == 1:
-                mir_homes_offset = n
             prop = parts[2]
-            if len(transformed_data["homes_mir"]) < (mir_homes_offset) + 1:
+            if len(transformed_data["homes_mir"]) < (n - mir_homes_offset) + 1:
                 transformed_data["homes_mir"].append({})
             else:
-                transformed_data["homes_mir"][mir_homes_offset][prop] = value
+                transformed_data["homes_mir"][n - mir_homes_offset][prop] = value
 
         elif key.startswith("homes_rtb"):
             parts = key.split('.')
@@ -197,13 +198,11 @@ def transform_city_data(data):
 
             if not rtb_homes_offset:
                 rtb_homes_offset = n
-            if n - rtb_homes_offset == 1:
-                rtb_homes_offset = n
             prop = parts[2]
-            if len(transformed_data["homes_rtb"]) < (rtb_homes_offset) + 1:
+            if len(transformed_data["homes_rtb"]) < (n - rtb_homes_offset) + 1:
                 transformed_data["homes_rtb"].append({})
             else:
-                transformed_data["homes_rtb"][rtb_homes_offset][prop] = value
+                transformed_data["homes_rtb"][n - rtb_homes_offset][prop] = value
 
         elif key.startswith("division"):
             parts = key.split('.')
