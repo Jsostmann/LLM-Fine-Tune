@@ -48,8 +48,7 @@ FIELDS = [
 BASE_URL = "https://www.eastwoodhomes.com/api/search?query="
 CITIES = ["Greensboro+Area", "Atlanta", "Charleston", "Columbia", "Greenville", "Richmond", "Charlotte", "Raleigh"]
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = "eastwood_data"
-
+DATA_DIR = os.path.join(BASE_DIR, "eastwood_data")
 
 def contains_html(text):
     if isinstance(text, str):
