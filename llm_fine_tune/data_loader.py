@@ -3,52 +3,9 @@ import requests
 import os
 import re
 from bs4 import BeautifulSoup
+from multiprocessing import Pool
 
-FIELDS = [
-    r"^communities\.\d+\.name$",
-    r"^communities\.\d+\.from_the$",
-    r"^communities\.\d+\.hoa_name$",
-    r"^communities\.\d+\.hoa_yearly_fee$",
-    r"^communities\.\d+\.city$",
-    r"^communities\.\d+\.state\.state$",
-    r"^communities\.\d+\.zip$",
-    r"^communities\.\d+\.county$",
-    r"^communities\.\d+\.headline$",
-    r"^communities\.\d+\.description$",
-    r"^communities\.\d+\.amenities_photos\.\d+\.caption$",
-    r"^communities\.\d+\.model_home_phone$",
-
-    r"^division\.name$",
-    r"^division\.subheadline$",
-    r"^division\.intro$",
-    r"^division\.description$",
-    r"^division\.highlights\.\d+\.name$",
-    r"^division\.highlights\.\d+\.description$",
-
-    r"^(homes_mir|homes_rtb)\.\d+\.floor_plan\.extension\.name$",
-    r"^(homes_mir|homes_rtb)\.\d+\.price$",
-    r"^(homes_mir|homes_rtb)\.\d+\.address$",
-    r"^(homes_mir|homes_rtb)\.\d+\.city$",
-    r"^(homes_mir|homes_rtb)\.\d+\.zip$",
-    r"^(homes_mir|homes_rtb)\.\d+\.square_feet$",
-    r"^(homes_mir|homes_rtb)\.\d+\.bedrooms$",
-    r"^(homes_mir|homes_rtb)\.\d+\.bathrooms$",
-    r"^(homes_mir|homes_rtb)\.\d+\.half_baths$",
-    r"^(homes_mir|homes_rtb)\.\d+\.garage$",
-    r"^(homes_mir|homes_rtb)\.\d+\.stories$",
-    r"^(homes_mir|homes_rtb)\.\d+\.basement$",
-    r"^(homes_mir|homes_rtb)\.\d+\.description$",
-    r"^(homes_mir|homes_rtb)\.\d+\.unique_features$",
-    r"^(homes_mir|homes_rtb)\.\d+\.sold$",
-    r"^(homes_mir|homes_rtb)\.\d+\.community\.name$",
-    r"^(homes_mir|homes_rtb)\.\d+\.floorplan_type\.name$",
-    r"^(homes_mir|homes_rtb)\.\d+\.special\d+\.summary$"
-]
-
-BASE_URL = "https://www.eastwoodhomes.com/api/search?query="
-CITIES = ["Greensboro+Area", "Atlanta", "Charleston", "Columbia", "Greenville", "Richmond", "Charlotte", "Raleigh"]
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "eastwood_data")
+from constants import BASE_URL, DATA_URL, FIELDS, DATA_DIR
 
 def contains_html(text):
     if isinstance(text, str):
@@ -64,6 +21,23 @@ def extract_text_from_html(text):
 
     return text
 
+def get_citiy_names(url):
+    cities = []
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        city_elements = soup.find_all('h3', class_='c-card-location__name')
+        for div_element in city_elements:
+            city = div_element.text
+            city = city.replace(" ", "+")
+            if city:
+                cities.append(city)
+    
+        return cities
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error getting city names: {e}")
 
 def create_directory(directory):
     if not os.path.exists(directory):
@@ -80,7 +54,7 @@ def download_json(url, output_file):
             data = response.json()
             json.dump(data, f, indent=4)
         
-        print(f"Downloaded JSON data has been written to {output_file}")
+        print(f"Downloaded JSON data has been downloaded to {output_file}")
 
         return data
     
@@ -93,7 +67,7 @@ def load_json(file_name):
         with open(file_name, 'r') as f:
             data = json.load(f)
         
-        print(f"JSON data has been loaded to {file_name}")
+        print(f"JSON data has been loaded from {file_name}")
 
         return data
     
@@ -152,9 +126,7 @@ def flatten_data(data):
 def transform_city_data(data):
 
     mir_homes_offset = None
-    current_mir_home = None
     rtb_homes_offset = None
-    current_rtb_home = None
     
     transformed_data = {
         "communities": [],
@@ -218,13 +190,42 @@ def transform_city_data(data):
 
     return transformed_data
 
-
-def load_city_data():
-    
+def load_city_data_async():
     create_directory(DATA_DIR)
+    cities = get_citiy_names(BASE_URL)
 
-    for city in CITIES:
-        city_url = f"{BASE_URL}{city}"
+    with Pool(len(cities)) as pool:
+        data = pool.map(get_city_data, cities)
+
+    return data
+
+def get_city_data(city):
+
+    print(f"Getting data for city: {city}")
+    city_url = f"{DATA_URL}{city}"
+    city_file = f"{city}.json"
+    city_path =  os.path.join(DATA_DIR, city_file)
+
+    city_data = None
+
+    if not os.path.exists(city_path):
+        city_data = download_json(city_url, city_path)
+        flattened_data = flatten_data(city_data)
+        filtered_data = filter_data(flattened_data, FIELDS)
+        transformed_data = transform_city_data(filtered_data)
+        save_json(transformed_data, city_path)
+    else:
+        city_data = load_json(city_path)
+
+    return city_data
+
+def load_city_data_sync():
+
+    create_directory(DATA_DIR)
+    cities = get_citiy_names(BASE_URL)
+    
+    for city in cities:
+        city_url = f"{DATA_URL}{city}"
         city_file = f"{city}.json"
         city_path =  os.path.join(DATA_DIR, city_file)
 
@@ -241,4 +242,4 @@ def load_city_data():
             city_data = load_json(city_path)
 
 if __name__ == "__main__":
-    load_city_data()
+    load_city_data_async()

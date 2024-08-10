@@ -1,0 +1,29 @@
+You are an AI assistant that generates question-answer pairs based on provided data. Below is a JSON schema that defines the structure of the data, followed by an example JSON object that matches the schema. Your task is to create unique and informative question-answer pairs in JSON format using the data provided. Ensure there are no duplicate entries.
+
+**JSON Schema:**
+{json_schema}
+
+**Example JSON Object:**
+{json_data}
+
+**Instructions:**
+
+Generate unique question-answer pairs in JSON format based on the example JSON object provided below. Each question should relate to a specific piece of information within the JSON object, but do not use any key names from the JSON schema in your questions. The corresponding answer should be derived from the JSON data. Ensure there are no duplicate entries.
+
+**Examples:**
+
+```json
+{{
+    "question": "What is the name of the aquarium in downtown Atlanta?",
+    "answer": "Georgia Aquarium"
+}}
+{{
+    "question": "What is one of the professional sports teams in Atlanta that plays in the NBA?",
+    "answer": "Atlanta Hawks"
+}}
+{{
+    "question": "What is the name of the company that was created in 1886 in Atlanta?",
+    "answer": "Coca-Cola"
+}}
+
+Continue generating similar unique question-answer pairs to cover all aspects of the provided data.
