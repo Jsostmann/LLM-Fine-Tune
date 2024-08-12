@@ -1,67 +1,30 @@
-from openai import OpenAI
-from groq import Groq
 import os
 import json
 import glob
-from dotenv import load_dotenv
-
-from constants import SCHEMA_DIR, DATA_DIR, PROMPT_DIR, DEFAULT_SCHEMA, DEFAULT_PROMPT
-
-AGENT_MAP = {"GROG": Groq, "LLAMA": OpenAI}
+import requests
+from agents.agents import AgentFactory
+from constants import SCHEMA_DIR, DATA_DIR, PROMPT_DIR, DEFAULT_SCHEMA, DEFAULT_PROMPT, DEFAULT_FINE_TUNE
 
 class DataGenerator:
-    def __init__(self, use_local, api_key="OPENAI_API_KEY", server_url="http://localhost:11434/v1/", agent="LLAMA"):
-        self.server_url = server_url
-        self.use_local = use_local
-        self.client = None
-        self.api_key = None
+    def __init__(self, agent):
+        self.agent = agent
         
         self.schema_files = self.get_files(SCHEMA_DIR, "*.json")
         self.data_files = self.get_files(DATA_DIR, "*.json")
         self.prompt_files = self.get_files(PROMPT_DIR, "*.txt")
 
-        agent_class = AGENT_MAP.get(agent)
-
-        if not agent_class:
-            raise ValueError(f"Invalid agent type: {agent}")
-        
-        if use_local:
-            self.client = agent_class(base_url=server_url, api_key='ollama')
-
-        else:
-            load_dotenv()
-            self.api_key = os.environ.get(api_key)
-
-            if not self.api_key:
-                raise ValueError("OPENAI_API_KEY environment variable not set")
-            
-            self.client = agent_class(api_key=self.api_key)
-
     def generate_qa_pairs(self, data_file, schema, system_prompt, model="llama-3.1-70b-versatile"):
-    
         with open(data_file, mode="r") as f:
             data = json.load(f)
 
         json_schema_str = json.dumps(schema, indent=4)
         json_data_str = json.dumps(data, indent=4)
         
-        formatted_prompt = system_prompt.format(json_schema=json_schema_str, json_data=json_data_str)
+        formatted_prompt = system_prompt.format(json_schema=json_schema_str, json_data=json_data_str)        
+        return self.agent.generate(prompt=formatted_prompt, model=model)
 
-        return self.generate_prompt(user_prompt=formatted_prompt, model=model)
-    
-    def generate_prompt(self, system_prompt=None, user_prompt=None, model="llama3:8b", temperature=0.7):
-        messages=[]
-
-        if user_prompt:
-            messages.append({"role": "user", "content": user_prompt})
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        
-        response = self.client.chat.completions.create(model=model, messages=messages, temperature=temperature)
-        return response.choices[0].message.content.strip()
-
-    def generate_data(self):
-        data = []
+    def generate_data(self, _files=None, out_file=DEFAULT_FINE_TUNE):
+        files = _files if _files else self.data_files
 
         with open(DEFAULT_SCHEMA, mode="r") as f:
             schema = json.load(f)
@@ -69,17 +32,36 @@ class DataGenerator:
         with open(DEFAULT_PROMPT, mode="r") as f:
             sys_prompt = f.read()
 
-        for file in self.data_files:
+        for file in files:
             new_data = self.generate_qa_pairs(data_file=file, schema=schema, system_prompt=sys_prompt)
-            print(new_data)
-            exit(1)
+            if not new_data:
+                print(file)
+                continue
+            qa_list = new_data.split("\n")
+            self.save_json(qa_list, out_file)
 
     def get_files(self, dir, file_pattern, recursive=True):
         files = glob.glob(os.path.join(dir, file_pattern), recursive=recursive)
         return files
     
-if __name__ == "__main__":
+    def save_json(self, data, file_name):
+        try:
+            with open(file_name, 'a+') as f:     
+                for qa_pair in data:
+                    if not qa_pair:
+                        continue
+                    try:
+                        json.dump(json.loads(qa_pair), f)
+                        f.write("\n")
+                    except Exception as e:
+                        print(f"Error saving QA pair: {qa_pair} : {e}")
+                print(f"JSON data has been saved to {file_name}")
+        
+        except requests.exceptions.RequestException as e:
+            print(f"Error Saving JSON: {e}")
 
-    
-    data_generator = DataGenerator(use_local=False, api_key="GROG_API_KEY", agent="GROG")
+
+if __name__ == "__main__":
+    groq_agent = AgentFactory.get_agent("GROG")
+    data_generator = DataGenerator(agent=groq_agent)
     data_generator.generate_data()
