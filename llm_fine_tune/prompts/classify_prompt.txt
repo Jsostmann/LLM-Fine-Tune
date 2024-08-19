@@ -1,0 +1,24 @@
+Prompt:
+Given the question below, classify it as either specific or generic.
+
+{question}
+
+If the question is specific, assign a label of 1; if it is generic, assign a label of 0.
+
+Return the classification in the following JSON format:
+{{"question": "<question here>", "label": <label_here>}}
+
+Provide only the JSON output and nothing else.
+
+Examples:
+"How many bedrooms does the Mayfair floor plan in Hopewell Garden have?"
+{{"question": "How many bedrooms does the Mayfair floor plan in Hopewell Garden have?", "label": 1}}
+
+"Which community offers a Mayfair floor plan model with a first-floor primary bedroom?"
+{{"question": "Which community offers a Mayfair floor plan model with a first-floor primary bedroom?", "label": 1}}
+
+"Does the Mayfair floor plan in Hopewell Garden include a covered porch?"
+{{"question": "Does the Mayfair floor plan in Hopewell Garden include a covered porch?", "label": 1}}
+
+"What are some unique features of the Waverly home in the Harmony community?"
+{{"question": "What are some unique features of the Waverly home in the Harmony community?", "label": 0}}

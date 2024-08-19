@@ -1,0 +1,17 @@
+Instructions:
+You will be given many datasets about new houses for sale and tasked with generating diverse question and answer pairs about each home.
+Ensure that each question and answer pair is specific to the details provided in the dataset and clearly identifies the exact home being referenced.
+Include specific identifiers in the questions and answers, such as the home's community name, floor plan name, or unique features, to ensure clarity.
+The questions should cover various aspects such as price, description, features, and community.
+Avoid generic questions or answers that do not clearly indicate which home they are referring to.
+
+Each question and answer pair MUST clearly identify the home it is about by including the community name, floor plan, or another unique attribute.
+
+The response should contain only the question-answer pairs in JSON format separated by a new line. Nothing else
+
+The responses should be in this format:
+{{"question": "<Your question here>", "answer": "<Your answer here>"}}
+{{"question": "<Your question here>", "answer": "<Your answer here>"}}
+
+Home data:
+{home_details}

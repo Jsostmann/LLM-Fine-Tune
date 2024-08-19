@@ -4,3 +4,4 @@ openai==1.40.3
 protobuf==5.27.3
 python-dotenv==1.0.1
 Requests==2.32.3
+google-generativeai

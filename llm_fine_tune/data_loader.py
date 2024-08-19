@@ -48,13 +48,9 @@ def download_json(url, output_file):
     try:
         response = requests.get(url)
         response.raise_for_status()
-
-        with open(output_file, 'w') as f:
-            
-            data = response.json()
-            json.dump(data, f, indent=4)
+        data = response.json()
         
-        print(f"Downloaded JSON data has been downloaded to {output_file}")
+        print(f"JSON data has been downloaded to: {output_file}")
 
         return data
     
@@ -122,7 +118,6 @@ def flatten_data(data):
 
     return flatten_data_recursive(data, "")
 
-
 def transform_city_data(data):
 
     mir_homes_offset = None
@@ -141,7 +136,7 @@ def transform_city_data(data):
             parts = key.split('.')
             n = int(parts[1])
             prop = parts[2]
-            if len(transformed_data["communities"]) < n + 1:
+            while len(transformed_data["communities"]) <= n:
                 transformed_data["communities"].append({})
             if prop == "amenities_photos":
                 if "amenities_photos" not in transformed_data["communities"][n]:
@@ -155,25 +150,27 @@ def transform_city_data(data):
             parts = key.split('.')
             n = int(parts[1])
 
-            if not mir_homes_offset:
+            if mir_homes_offset is None:
                 mir_homes_offset = n
             prop = parts[2]
-            if len(transformed_data["homes_mir"]) < (n - mir_homes_offset) + 1:
+
+             #TODO: possible bug. keys of homes are sometimes not contiguous. Ex: 0, 1, 3, 4 or 3, 4, 8, 9
+            while len(transformed_data["homes_mir"]) <= (n - mir_homes_offset):
                 transformed_data["homes_mir"].append({})
-            else:
-                transformed_data["homes_mir"][n - mir_homes_offset][prop] = value
+            transformed_data["homes_mir"][n - mir_homes_offset][prop] = value
 
         elif key.startswith("homes_rtb"):
             parts = key.split('.')
             n = int(parts[1])
 
-            if not rtb_homes_offset:
+            if rtb_homes_offset is None:
                 rtb_homes_offset = n
             prop = parts[2]
-            if len(transformed_data["homes_rtb"]) < (n - rtb_homes_offset) + 1:
+
+            #TODO: possible bug. keys of homes are sometimes not contiguous. Ex: 0, 1, 3, 4 or 3, 4, 8, 9
+            while len(transformed_data["homes_rtb"]) <= (n - rtb_homes_offset):
                 transformed_data["homes_rtb"].append({})
-            else:
-                transformed_data["homes_rtb"][n - rtb_homes_offset][prop] = value
+            transformed_data["homes_rtb"][n - rtb_homes_offset][prop] = value
 
         elif key.startswith("division"):
             parts = key.split('.')
@@ -182,15 +179,19 @@ def transform_city_data(data):
                 n = int(key.split('.')[2])
                 if "highlights" not in transformed_data["division"]:
                     transformed_data["division"]["highlights"] = []
-                if len(transformed_data["division"]["highlights"]) < n + 1:
+                while len(transformed_data["division"]["highlights"]) <= n:
                     transformed_data["division"]["highlights"].append({})
                 transformed_data["division"]["highlights"][n][parts[3]] = value
             else:
-                transformed_data["division"][prop] = value 
+                transformed_data["division"][prop] = value
+                
+    transformed_data["homes_mir"] = [house for house in transformed_data["homes_mir"] if house]
+    transformed_data["homes_rtb"] = [house for house in transformed_data["homes_rtb"] if house]
 
     return transformed_data
 
 def load_city_data_async():
+
     create_directory(DATA_DIR)
     cities = get_citiy_names(BASE_URL)
 

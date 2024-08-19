@@ -1,4 +1,4 @@
-from .agent_base import Agent
+from agent_base import Agent
 from openai import OpenAI
 from groq import Groq
 import google.generativeai as genai
@@ -23,8 +23,9 @@ class GroqAgent(Agent):
             return None
         return response.choices[0].message.content.strip()
 
+
 class OpenAIAgent(Agent):
-    def __init__(self, api_key=None, use_local=False, base_url=None):
+    def __init__(self, api_key="ollama", use_local=False, base_url=None):
         super().__init__(api_key_env_var="OPENAI_API_KEY", api_key=api_key)
         self.use_local = use_local
         self.base_url = base_url
@@ -41,18 +42,18 @@ class OpenAIAgent(Agent):
     def generate(self, *args, **kwargs):
         # OpenAI-specific data generation logic
         messages = []
-        system_prompt = kwargs.get('system_prompt')
-        user_prompt = kwargs.get('user_prompt')
+        user_prompt = kwargs.get('prompt')
         model = kwargs.get('model')
 
         if user_prompt:
             messages.append({"role": "user", "content": user_prompt})
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-
-        kwargs['messages'] = messages
-        response = self.client.chat.completions.create(messages=messages, model=model)
+        try:
+            response = self.client.chat.completions.create(messages=messages, model=model)
+        except Exception as e:
+            print(f"Error generating response: {e}")
+            return None
         return response.choices[0].message.content.strip()
+
 
 class GeminiAgent(Agent):
     def __init__(self, api_key=None):

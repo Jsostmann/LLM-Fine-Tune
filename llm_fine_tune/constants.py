@@ -10,6 +10,7 @@ FINE_TUNE_DIR = os.path.join(BASE_DIR, "fine_tune_data")
 DEFAULT_SCHEMA = os.path.join(SCHEMA_DIR, "schema.json")
 DEFAULT_PROMPT = os.path.join(PROMPT_DIR, "prompt.txt")
 DEFAULT_FINE_TUNE = os.path.join(FINE_TUNE_DIR, "data.json")
+DEFAULT_PROMPT_SUMMARY = os.path.join(PROMPT_DIR, "summary_prompt.txt")
 
 BASE_URL = "https://www.eastwoodhomes.com/"
 DATA_URL = f"{BASE_URL}api/search?query="
